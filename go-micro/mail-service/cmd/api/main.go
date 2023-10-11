@@ -4,14 +4,20 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 )
 
-type Config struct{}
+type Config struct {
+	Mailer Mail
+}
 
 const webPort = "80"
 
 func main() {
-	app := Config{}
+	app := Config{
+		Mailer: creteMail(),
+	}
 
 	log.Println("Starting mail service on port", webPort)
 
@@ -25,4 +31,20 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
+}
+
+func creteMail() Mail {
+	port, _ := strconv.Atoi(os.Getenv("MAIL_PORT"))
+	m := Mail{
+		Domain:      os.Getenv("MAIL_DOMAIN"),
+		Host:        os.Getenv("MAIL_HOST"),
+		Port:        port,
+		Username:    os.Getenv("MAIL_USERNAME"),
+		Password:    os.Getenv("MAIL_PASSWORD"),
+		Encryption:  os.Getenv("MAIL_ENCRYPTION"),
+		FromName:    os.Getenv("FROM_NAME"),
+		FromAddress: os.Getenv("FROM_ADDRESS"),
+	}
+
+	return m
 }
