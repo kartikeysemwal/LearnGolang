@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	// to rabbitmq
+	// connect to rabbitmq
 	rabbitConn, err := connect()
 	if err != nil {
 		log.Println(err)
